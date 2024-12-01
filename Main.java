@@ -1,19 +1,21 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import src.view.AddItem;
+import src.model.DeleteItem;
+import src.model.UpdateItem;
+import src.model.LoadItem;
 
 public class Main {
-    public static final String FILE_PATH = "database/items.txt";
-    private static ArrayList<String[]> items;
+    private static ArrayList<String[]> items; // List to store items
+    public static final String FILE_PATH = "src/database/items.txt"; // File path
 
     public static void main(String[] args) {
-        // Initialize item list and load from file
+        // Initialize item list
         items = new ArrayList<>();
-        loadItemsFromFile();
+
+        // Load items from file
+        LoadItem.loadItemsFromFile(items);
 
         // Frame setup
         JFrame frame = new JFrame("Inventory System");
@@ -64,28 +66,5 @@ public class Main {
         frame.getContentPane().add(buttonPanel, "South");
 
         frame.setVisible(true);
-    }
-
-    // Load items from file
-    private static void loadItemsFromFile() {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();  // Ensure directory exists
-            try {
-                file.createNewFile();  // Create file if it doesn't exist
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error creating file: " + e.getMessage());
-            }
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] item = line.split("\\|");
-                items.add(item);
-            }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error loading file: " + e.getMessage());
-        }
     }
 }
